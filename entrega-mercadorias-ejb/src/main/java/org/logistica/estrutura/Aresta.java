@@ -47,6 +47,10 @@ public class Aresta {
 	@JoinColumn(name="FK_VERTICE_DESTINO")
 	private Vertice destino;
 
+
+    public Aresta() {
+    }
+
 	public Aresta(Vertice v1, Vertice v2) {
 		this.distancia = 1;
 		this.origem = v1;
