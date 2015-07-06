@@ -18,14 +18,14 @@ import javax.persistence.Table;
 @Entity
 @Table(name="ARESTA")
 public class Aresta {
-	
+
 	/**
 	 * Identificador interno.
 	 */
 	@Id
 	@GeneratedValue
 	private Long id;
-	
+
 	/**
 	 * Distancia entre os vertices.
 	 */
@@ -35,7 +35,7 @@ public class Aresta {
 	/**
 	 * Vertice de origem da aresta
 	 */
-	@OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.EAGER, orphanRemoval = true)
+	@OneToOne(optional = false, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name="FK_VERTICE_ORIGEM")
 	private Vertice origem;
 
@@ -43,7 +43,7 @@ public class Aresta {
 	 * Vertice de destino da aresta.
 	 */
 
-	@OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.EAGER, orphanRemoval = true)
+	@OneToOne( optional = false, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name="FK_VERTICE_DESTINO")
 	private Vertice destino;
 
@@ -53,7 +53,7 @@ public class Aresta {
 		this.destino = v2;
 	}
 
-	
+
 	public void setDistancia(int novoPeso) {
 		this.distancia = novoPeso;
 	}
@@ -77,7 +77,7 @@ public class Aresta {
 	public Vertice getOrigem() {
 		return origem;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
