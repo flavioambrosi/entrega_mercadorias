@@ -3,8 +3,10 @@ package org.logistica;
 import java.math.BigDecimal;
 import java.util.Collection;
 
-import javax.ejb.Local;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 import org.apache.commons.collections15.Transformer;
 import org.logistica.dao.LogisticaDAO;
@@ -20,35 +22,45 @@ import edu.uci.ics.jung.graph.SparseMultigraph;
 @Stateless (name = "ejb/ServicosEntregaMercadorias", mappedName = "ejb/ServicosEntregaMercadorias")
 public class ServicosEntregaMercadoriasBean implements ServicosEntregaMercadorias{
 
+    private static String ENTITY_MANAGER_NAME = "LOGISTICA";
+
 	public void adicionaMapa(String origem, String destino, Integer distancia) throws MapaCadastradoException{
-		LogisticaDAO dao = new LogisticaDAO();
+	    EntityManagerFactory emf = Persistence.createEntityManagerFactory(ENTITY_MANAGER_NAME);
+        EntityManager em = emf.createEntityManager();
 
-		//Verifica a existencia do ponto de origem informado
-		Vertice verticeOrigem = dao.buscaVertice(origem);
+		try {
+		    LogisticaDAO dao = new LogisticaDAO();
+		      //Verifica a existencia do ponto de origem informado
+	        Vertice verticeOrigem = dao.buscaVertice(origem);
 
-		//Verifica a existencia dos pontos origem e destino e caso já exista, retorna um erro.
-		if(verticeOrigem != null){
-			for(Aresta aresta : verticeOrigem.getArestas()){
-				if(aresta.getDestino().equals(destino)){
-					throw new MapaCadastradoException("Mapa com origem em " + origem + " e destino em " + destino + " já cadastrado.");
-				}
-			}
-		} else {
-			verticeOrigem = new Vertice(origem);
-			dao.insereVertice(verticeOrigem);
+	        //Verifica a existencia dos pontos origem e destino e caso já exista, retorna um erro.
+	        if(verticeOrigem != null){
+	            for(Aresta aresta : verticeOrigem.getArestas()){
+	                if(aresta.getDestino().equals(destino)){
+	                    throw new MapaCadastradoException("Mapa com origem em " + origem + " e destino em " + destino + " já cadastrado.");
+	                }
+	            }
+	        } else {
+	            verticeOrigem = new Vertice(origem);
+	            dao.insereVertice(verticeOrigem, em);
+	        }
+
+	        Vertice verticeDestino = dao.buscaVertice(destino);
+	        if(verticeDestino == null) {
+	            verticeDestino = new Vertice(destino);
+	            dao.insereVertice(verticeDestino, em);
+	        }
+
+	        Aresta aresta = new Aresta(verticeOrigem, verticeDestino);
+	        aresta.setDistancia(distancia);
+	        dao.insereAresta(aresta, em);
+
+	        this.montaGrafo();
+
+		} finally {
+		    emf.close();
 		}
 
-		Vertice verticeDestino = dao.buscaVertice(destino);
-		if(verticeDestino == null) {
-			verticeDestino = new Vertice(destino);
-			dao.insereVertice(verticeDestino);
-		}
-
-		Aresta aresta = new Aresta(verticeOrigem, verticeDestino);
-		aresta.setDistancia(distancia);
-		dao.insereAresta(aresta);
-
-		this.montaGrafo();
 	}
 
 	public BigDecimal buscaCaminho(String origem, String destino, BigDecimal autonomia, BigDecimal valorCombustivel) throws VerticeNotFoundExcetion{

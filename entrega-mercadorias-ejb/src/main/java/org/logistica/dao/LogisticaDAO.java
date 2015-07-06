@@ -16,39 +16,26 @@ public class LogisticaDAO {
 
 	private String ENTITY_MANAGER_NAME = "LOGISTICA";
 
-	public void insereAresta(Aresta aresta) {
-		EntityManagerFactory emf = Persistence
-				.createEntityManagerFactory(ENTITY_MANAGER_NAME);
-		EntityManager em = emf.createEntityManager();
+	public void insereAresta(Aresta aresta, EntityManager em) {
+//		EntityManagerFactory emf = Persistence.createEntityManagerFactory(ENTITY_MANAGER_NAME);
+//		EntityManager em = emf.createEntityManager();
 
 		try {
-			em.getTransaction().begin();
 			em.persist(aresta);
-			em.getTransaction().commit();
 		} catch (Exception e) {
-			em.getTransaction().rollback();
-			e.printStackTrace();
-		} finally {
-			emf.close();
+		    e.printStackTrace();
 		}
 	}
 
-	public void insereVertice(Vertice vertice) {
-		EntityManagerFactory emf = Persistence
-				.createEntityManagerFactory(ENTITY_MANAGER_NAME);
-		EntityManager em = emf.createEntityManager();
+	public void insereVertice(Vertice vertice, EntityManager em) {
+//		EntityManagerFactory emf = Persistence.createEntityManagerFactory(ENTITY_MANAGER_NAME);
+//		EntityManager em = emf.createEntityManager();
 
 		try {
-			em.getTransaction().begin();
 			em.persist(vertice);
-			em.getTransaction().commit();
 		} catch (Exception e) {
-			em.getTransaction().rollback();
 			e.printStackTrace();
-		} finally {
-			emf.close();
 		}
-
 	}
 
 	public Collection<Vertice> buscaTodosVertices() {
@@ -61,7 +48,6 @@ public class LogisticaDAO {
 			Query query = em.createQuery("SELECT e FROM Vertice e");
 			vertices = query.getResultList();
 		} catch (Exception e) {
-			em.getTransaction().rollback();
 			e.printStackTrace();
 		} finally {
 			emf.close();
@@ -80,7 +66,6 @@ public class LogisticaDAO {
 			vertice = (Vertice) query.getSingleResult();
 		} catch (NoResultException e){
 		} catch (Exception e) {
-			em.getTransaction().rollback();
 			e.printStackTrace();
 		} finally {
 			emf.close();
