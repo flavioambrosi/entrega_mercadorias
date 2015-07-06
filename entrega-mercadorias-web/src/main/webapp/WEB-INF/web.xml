@@ -20,7 +20,7 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>ServicoBuscaMenorCaminho</servlet-name>
+        <servlet-name>ServicoCadastraMapa</servlet-name>
         <url-pattern>/ServicoCadastraMapa/servicoCadastraMapa</url-pattern>
     </servlet-mapping>
 </web-app>

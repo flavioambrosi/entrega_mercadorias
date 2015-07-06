@@ -10,24 +10,20 @@ import javax.jws.WebService;
 import org.logistica.ServicosEntregaMercadorias;
 import org.logistica.exception.VerticeNotFoundExcetion;
 
-@WebService (serviceName="ServicoBuscaMenorCaminho/servicoBuscaMenorCaminho")
+@WebService
 public class ServicoBuscaMenorCaminho {
 
 	@EJB
 	ServicosEntregaMercadorias servicos;
-	
+
 	@WebMethod
-	public void buscaCaminho(@WebParam(name = "origem") String origem,
-			@WebParam(name = "destino") String destino,
-			@WebParam(name = "distancia")Integer distancia,
-			@WebParam(name = "autonomia") BigDecimal autonomia,
-			@WebParam(name = "valorCombustivel") BigDecimal valorCombustivel) {
-				
+	public void buscaCaminho(String origem, String destino, Integer distancia, BigDecimal autonomia, BigDecimal valorCombustivel) {
+
 			try {
 				servicos.buscaCaminho(origem, destino, autonomia, valorCombustivel);
 			} catch (VerticeNotFoundExcetion e) {
 				e.printStackTrace();
 			}
-		
+
 	}
 }
