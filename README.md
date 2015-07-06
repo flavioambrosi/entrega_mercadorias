@@ -6,12 +6,12 @@ deverá informar um nome para este mapa. É importante que os mapas sejam persis
 deploy todas as informações desapareçam. O formato de malha logística é bastante simples, cada linha mostra uma rota: 
 ponto de origem, ponto de destino e distância entre os pontos em quilômetros.
 
-A B 10
-B D 15
-A C 20
-C D 30
-B E 50
-D E 30
+AB 10  
+BD 15  
+AC 20  
+CD 30  
+BE 50  
+DE 30  
 
 Com os mapas carregados o requisitante irá procurar o menor valor de entrega e seu caminho, para isso ele passará o 
 nome do ponto de origem, nome do ponto de destino, autonomia do caminhão (km/l) e o valor do litro do combustível, 
@@ -36,3 +36,5 @@ Realizar as seguintes configurações no JBOSS:
 em conf-jboss\standalone\configurations\standalone-preview.xml
 
 Para a criação do banco, executar o script cria_banco_mysql.sql
+
+Pendente da elaboração de cenários de testes.
