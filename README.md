@@ -32,8 +32,7 @@ Para construir a aplicaçãodeve-se ter o maven instalado na máquina. Executar 
 Realizar as seguintes configurações no JBOSS:
 1 - Criar o modulo para configurar o MySql. Copiar os arquivos da pasta conf-jboss\modules\com\mysql\main em
 <JBOSS_HOME>\modules\com\mysql\main
-2 - Configurar o aplicaçãoDS no arquivo <JBOSS_HOME>\standalone\configuration\standalone-preview.xml conforme arquivo
-em conf-jboss\standalone\configurations\standalone-preview.xml
+2 - Configurar o datasource aplicaçãoDS no arquivo <JBOSS_HOME>\standalone\configuration\standalone-preview.xml conforme arquivo em conf-jboss\standalone\configurations\standalone-preview.xml
 
 Para a criação do banco, executar o script cria_banco_mysql.sql
 
