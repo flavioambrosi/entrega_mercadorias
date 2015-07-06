@@ -1,0 +1,16 @@
+<web-app>
+	<!-- To use non XDoclet listeners, create a listeners.xml file that contains 
+		the additional listeners and place it in your project's merge dir. -->
+	<!-- ============================================= -->
+	<!-- servlet de inicializacao -->
+	<!-- ============================================= -->
+	<servlet>
+		<servlet-name>ServicoBuscaMenorCaminho</servlet-name>
+		<servlet-class>org.logistica.servicos.ServicoBuscaMenorCaminho</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ServicoBuscaMenorCaminho</servlet-name>
+		<url-pattern>/ServicoBuscaMenorCaminho/servicoBuscaMenorCaminho</url-pattern>
+	</servlet-mapping>
+</web-app>
