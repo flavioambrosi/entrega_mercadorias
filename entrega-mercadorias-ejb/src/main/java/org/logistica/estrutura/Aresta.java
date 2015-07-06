@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 /**
  * Classe que representa uma aresta do grafo.
  * @author Flavio
@@ -121,8 +123,9 @@ public class Aresta {
 	 */
 	@Override
 	public int hashCode() {
-	    int hashCode = 1;
-        hashCode = 31 * hashCode + id.hashCode();
-        return hashCode;
+	    HashCodeBuilder builder = new HashCodeBuilder(1,31);
+        builder.append(this.id);
+        builder.append(this.getDistancia());
+        return builder.toHashCode();
 	}
 }

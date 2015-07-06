@@ -50,7 +50,11 @@ public class ServicoCadastraMapa {
             }
             MenorCaminho resultado = servicos.buscaCaminho(origem, destino, autonomia, valorCombustivel);
 
-            msgRetorno.setResulMessage("A rota a ser utilizada custara: " + resultado);
+            if(resultado.getMensagemErro() != null){
+                msgRetorno.setResulMessage(resultado.getMensagemErro());
+            } else {
+                msgRetorno.setResulMessage("A rota a ser utilizada custara: " + resultado.getMenorCaminho() + ". Custo: " + resultado.getCustoRota());
+            }
         } catch (VerticeNotFoundExcetion e) {
             e.printStackTrace();
             msgRetorno.setResulMessage("Erro no cadastro da rota. Consulte Log no servidor");

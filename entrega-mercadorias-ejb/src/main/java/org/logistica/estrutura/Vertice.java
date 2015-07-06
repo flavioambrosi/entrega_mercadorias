@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 /**
  * Classe que representa um vertice no grafo.
  * @author Flavio
@@ -105,9 +107,10 @@ public class Vertice  {
 	 */
 	@Override
 	public int hashCode() {
-	    int hashCode = 1;
-	    hashCode = 31 * hashCode + id.hashCode();
-	    hashCode = 31 * hashCode + descricao.hashCode();
-	    return hashCode;
+	    HashCodeBuilder builder = new HashCodeBuilder(1,31);
+	    builder.append(this.id);
+	    builder.append(this.descricao);
+	    builder.append(this.arestas);
+	    return builder.toHashCode();
 	}
 }
