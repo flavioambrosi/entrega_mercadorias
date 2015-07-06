@@ -15,30 +15,10 @@ CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 COLLATE utf8_gener
 USE `mydb` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`category`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`category` (
-  `category_id`  NOT NULL COMMENT '',
-  `name` (255) NOT NULL COMMENT '',
-  PRIMARY KEY (`category_id`)  COMMENT '');
-
-
--- -----------------------------------------------------
 -- Table `mydb`.`VERTICE`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`VERTICE` (
-  `ID` INT NOT NULL COMMENT '',
-  `DESCRICAO` VARCHAR(45) NULL COMMENT '',
-  PRIMARY KEY (`ID`)  COMMENT '',
-  UNIQUE INDEX `DESCRICAO_UNIQUE` (`DESCRICAO` ASC)  COMMENT '')
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `mydb`.`VERTICE`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`VERTICE` (
-  `ID` INT NOT NULL COMMENT '',
+  `ID` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '',
   `DESCRICAO` VARCHAR(45) NULL COMMENT '',
   PRIMARY KEY (`ID`)  COMMENT '',
   UNIQUE INDEX `DESCRICAO_UNIQUE` (`DESCRICAO` ASC)  COMMENT '')
@@ -49,10 +29,10 @@ ENGINE = InnoDB;
 -- Table `mydb`.`ARESTA`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`ARESTA` (
-  `ID` INT NOT NULL COMMENT '',
+  `ID` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '',
   `DISTANCIA` INT NOT NULL COMMENT '',
-  `FK_VERTICE_ORIGEM` INT NOT NULL COMMENT '',
-  `FK_VERTICE_DESTINO` INT NOT NULL COMMENT '',
+  `FK_VERTICE_ORIGEM` BIGINT(20) NOT NULL COMMENT '',
+  `FK_VERTICE_DESTINO` BIGINT(20) NOT NULL COMMENT '',
   PRIMARY KEY (`ID`)  COMMENT '',
   INDEX `fk_ARESTA_VERTICE_idx` (`FK_VERTICE_ORIGEM` ASC)  COMMENT '',
   INDEX `fk_ARESTA_VERTICE1_idx` (`FK_VERTICE_DESTINO` ASC)  COMMENT '',
