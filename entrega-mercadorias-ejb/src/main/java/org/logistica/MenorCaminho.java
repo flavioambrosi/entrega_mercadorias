@@ -13,11 +13,13 @@ import java.math.BigDecimal;
  */
 public class MenorCaminho implements Serializable {
 
-    String menorCaminho;
+    private String menorCaminho;
 
-    Number distanciaRota;
+    private Number distanciaRota;
 
-    BigDecimal custoRota;
+    private BigDecimal custoRota;
+
+    private String mensagemErro;
 
 
     /**
@@ -73,6 +75,25 @@ public class MenorCaminho implements Serializable {
      */
     public void setCustoRota(BigDecimal custoRota) {
         this.custoRota = custoRota;
+    }
+
+
+    /**
+     * Obtém o valor do atributo mensagemErro. Verifique o comentário do atributo para mais detalhes.
+     * @return O mensagemErro.
+     */
+    public String getMensagemErro() {
+        return this.mensagemErro;
+    }
+
+
+
+    /**
+     * Define o valor do atributo mensagemErro. Verifique o comentário do atributo para mais detalhes.
+     * @param mensagemErro O mensagemErro a ser definido.
+     */
+    public void setMensagemErro(String mensagemErro) {
+        this.mensagemErro = mensagemErro;
     }
 
 

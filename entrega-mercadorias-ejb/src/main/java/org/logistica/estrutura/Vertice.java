@@ -100,4 +100,14 @@ public class Vertice  {
 	    return this.id.equals(other.id) && this.descricao.equals(other.descricao);
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+	    int hashCode = 1;
+	    hashCode = 31 * hashCode + id.hashCode();
+	    hashCode = 31 * hashCode + descricao.hashCode();
+	    return hashCode;
+	}
 }

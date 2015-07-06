@@ -115,4 +115,14 @@ public class Aresta {
         Aresta other = (Aresta) obj;
         return this.id.equals(other.id);
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+	    int hashCode = 1;
+        hashCode = 31 * hashCode + id.hashCode();
+        return hashCode;
+	}
 }

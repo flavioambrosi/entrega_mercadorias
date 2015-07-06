@@ -22,15 +22,19 @@ public class MainJung {
 
 		// Criar vertices
 		Vertice a = new Vertice("A");
-		a.setId(Long.valueOf(1));
 		Vertice b = new Vertice("B");
-		b.setId(Long.valueOf(2));
 		Vertice c = new Vertice("C");
-		c.setId(Long.valueOf(3));
 		Vertice d = new Vertice("D");
-		d.setId(Long.valueOf(4));
 		Vertice e = new Vertice("E");
-		e.setId(Long.valueOf(5));
+		Vertice f = new Vertice("F");
+
+		List<Vertice> vertices = new ArrayList<Vertice>();
+		vertices.add(a);
+		vertices.add(b);
+		vertices.add(c);
+		vertices.add(d);
+		vertices.add(e);
+		vertices.add(f);
 
 		Aresta ab = new Aresta(a, b);
 		ab.setDistancia(10);
@@ -50,20 +54,23 @@ public class MainJung {
 
 		Aresta be = new Aresta(b, e);
 		be.setDistancia(50);
-		b.getArestas().add(be);
+		d.getArestas().add(be);
 
 		Aresta de = new Aresta(d, e);
 		de.setDistancia(30);
 		d.getArestas().add(de);
 
-        List<Vertice> vertices = new ArrayList<Vertice>();
-        vertices.add(a);
-        vertices.add(b);
-        vertices.add(c);
-        vertices.add(d);
-        vertices.add(e);
+		Aresta af = new Aresta(a, f);
+		af.setDistancia(5);
+		a.getArestas().add(af);
+
+		Aresta fb = new Aresta(f, b);
+		fb.setDistancia(3);
+		f.getArestas().add(fb);
+
+
 		for (Vertice vertice : vertices) {
-//			g.addVertex(vertice);
+			g.addVertex(vertice);
 
 			for(Aresta aresta: vertice.getArestas()){
 				g.addEdge(aresta, aresta.getOrigem(), aresta.getDestino());
@@ -79,10 +86,30 @@ public class MainJung {
 				g, wtTransformer);
 		List<Aresta> l = alg.getPath(a, d);
 		Number dist = alg.getDistance(a, d);
-		System.out.println("The shortest path from" + a + " to " + d + " is:");
+		System.out.println("The shortest path from" + a + " to " + e + " is:");
 		System.out.println(l.toString());
 		System.out.println("and the length of the path is: " + dist);
 
+		Vertice gv = new Vertice("G");
+		g.addVertex(gv);
+
+		Aresta fg = new Aresta(f, gv);
+		fg.setDistancia(1);
+
+
+		Aresta ge = new Aresta(gv, e);
+		ge.setDistancia(1);
+
+
+		g.addEdge(fg, f, gv);
+		g.addEdge(ge, gv, e);
+
+		alg = new DijkstraShortestPath(g, wtTransformer);
+		l = alg.getPath(a, e);
+		dist = alg.getDistance(a, e);
+		System.out.println("The shortest path from" + a + " to " + e + " is:");
+		System.out.println(l.toString());
+		System.out.println("and the length of the path is: " + dist);
 
 	}
 
