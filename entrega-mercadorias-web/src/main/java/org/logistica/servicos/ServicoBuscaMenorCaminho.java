@@ -17,7 +17,11 @@ public class ServicoBuscaMenorCaminho {
 	ServicosEntregaMercadorias servicos;
 
 	@WebMethod
-	public void buscaCaminho(String origem, String destino, Integer distancia, BigDecimal autonomia, BigDecimal valorCombustivel) {
+	public void buscaCaminho(@WebParam(name = "origem") String origem,
+			@WebParam(name = "destino") String destino,
+			@WebParam(name = "distancia")Integer distancia,
+			@WebParam(name = "autonomia") BigDecimal autonomia,
+			@WebParam(name = "valorCombustivel") BigDecimal valorCombustivel) {
 
 			try {
 				servicos.buscaCaminho(origem, destino, autonomia, valorCombustivel);
