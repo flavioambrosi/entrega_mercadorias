@@ -19,11 +19,11 @@ agora sua tarefa é criar este Webservices. Um exemplo de entrada seria, origem 
 do litro 2,50; a resposta seria a rota A B D com custo de 6,25.
 
 De inicio identifiquei que se trata de um problema de menor caminho e para soluciona-lo estou utilizando a API 
-JUNG (http://jung.sourceforge.net/). Desenvolvi a camada de persistencia utilizando JPA + Hibernate. Desenvolvi uma camada
-de serviços, utilizando EJB3, que será responsável pelo cadastramento do mapa, pela montagem do grafo e pela busca da rota
-desejada.
+JUNG (http://jung.sourceforge.net/). Desenvolvi a camada de persistencia utilizando JPA + Hibernate. Desenvolvi uma camada de serviços, utilizando EJB3, que será responsável pelo cadastramento do mapa, pela montagem do grafo e pela busca da rota desejada. O códido se encontra em entrega-mercadorias-ejb.
 
-Foi desenvolvido também os WebServices ServicoBuscaMenorCaminho e ServicoCadastraMapa para realizar as operações citadas.
+Foi desenvolvido também os WebServices ServicoBuscaMenorCaminho e ServicoCadastraMapa para realizar as operações citadas. O códido se encontra em entrega-mercadorias-web.
+
+O projeto entrega-mercadorias-ear é responsável pelo empacotamento dos componentes ejb e web em um arquivo ear.
 
 Utilizado banco MySql, servidor de aplicações JBoss AS 7 e maven para buildar a aplicação.
 
