@@ -2,10 +2,10 @@ package org.logistica.dao;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
@@ -76,15 +76,16 @@ public class LogisticaDAO {
 
 		Vertice vertice = null;
 		try {
-			Query query = em.createQuery("SELECT e FROM Vertice e where e.descricao=" + nomeVertice);
+			Query query = em.createQuery("FROM Vertice e where e.descricao ='" + nomeVertice + "'");
 			vertice = (Vertice) query.getSingleResult();
+		} catch (NoResultException e){
 		} catch (Exception e) {
 			em.getTransaction().rollback();
 			e.printStackTrace();
 		} finally {
 			emf.close();
 		}
-		
+
 		return vertice;
 	}
 }
