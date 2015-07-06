@@ -36,5 +36,5 @@ public interface ServicosEntregaMercadorias {
      * @return custo da viagem entre os pontos
      * @throws VerticeNotFoundExcetion caso ocorra algum erro no processamento
      */
-    public BigDecimal buscaCaminho(String origem, String destino, BigDecimal autonomia, BigDecimal valorCombustivel) throws VerticeNotFoundExcetion;
+    public MenorCaminho buscaCaminho(String origem, String destino, BigDecimal autonomia, BigDecimal valorCombustivel) throws VerticeNotFoundExcetion;
 }

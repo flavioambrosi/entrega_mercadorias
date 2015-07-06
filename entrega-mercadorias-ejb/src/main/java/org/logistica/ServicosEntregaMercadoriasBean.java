@@ -2,13 +2,12 @@ package org.logistica;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 
 import org.apache.commons.collections15.Transformer;
@@ -63,7 +62,7 @@ public class ServicosEntregaMercadoriasBean implements ServicosEntregaMercadoria
 
 	}
 
-	public BigDecimal buscaCaminho(String origem, String destino, BigDecimal autonomia, BigDecimal valorCombustivel) throws VerticeNotFoundExcetion{
+	public MenorCaminho buscaCaminho(String origem, String destino, BigDecimal autonomia, BigDecimal valorCombustivel) throws VerticeNotFoundExcetion{
 		LogisticaDAO dao = new LogisticaDAO();
 		Vertice verticeOrigem = dao.buscaVertice(origem);
 		if(verticeOrigem == null){
@@ -75,7 +74,20 @@ public class ServicosEntregaMercadoriasBean implements ServicosEntregaMercadoria
 			throw new VerticeNotFoundExcetion("Destino não encontrado: " + destino);
 		}
 
-		Graph<Vertice, Aresta> g = this.montaGrafo();
+        Collection<Vertice> vertices = dao.buscaTodosVertices();
+        Graph<Vertice, Aresta> g = new SparseMultigraph<Vertice, Aresta>();
+
+        for (Vertice vertice : vertices) {
+            if(vertice.equals(verticeOrigem)){
+                verticeOrigem = vertice;
+            }else if(vertice.equals(verticeDestino)){
+                verticeOrigem = vertice;
+            }
+
+            for(Aresta aresta: vertice.getArestas()){
+                g.addEdge(aresta, aresta.getOrigem(), aresta.getDestino());
+            }
+        }
 
 		Transformer<Aresta, Integer> wtTransformer = new Transformer<Aresta, Integer>() {
 			public Integer transform(Aresta link) {
@@ -83,12 +95,17 @@ public class ServicosEntregaMercadoriasBean implements ServicosEntregaMercadoria
 			}
 		};
 		DijkstraShortestPath<Vertice, Aresta> alg = new DijkstraShortestPath<Vertice, Aresta>(g, wtTransformer);
+		List<Aresta> l = alg.getPath(verticeOrigem, verticeDestino);
 		Number distanciaTotal = alg.getDistance(verticeOrigem, verticeDestino);
 
 		BigDecimal custoTotal = BigDecimal.valueOf(distanciaTotal.intValue()).divide(autonomia).setScale(2,BigDecimal.ROUND_HALF_DOWN);
 		custoTotal = custoTotal.multiply(valorCombustivel);
 
-		return custoTotal;
+		MenorCaminho caminho = new MenorCaminho();
+		caminho.setMenorCaminho(l.toString());
+		caminho.setDistanciaRota(distanciaTotal);
+		caminho.setCustoRota(custoTotal);
+		return caminho;
 	}
 
 	private Graph<Vertice, Aresta> montaGrafo(){

@@ -82,4 +82,22 @@ public class Vertice  {
 		return s;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+	    if(obj == null){
+	        return false;
+	    }
+
+	    if(obj == this){
+	        return true;
+	    }
+
+	    if(!(obj instanceof Vertice)){
+	        return false;
+	    }
+
+	    Vertice other = (Vertice) obj;
+	    return this.id.equals(other.id) && this.descricao.equals(other.descricao);
+	}
+
 }

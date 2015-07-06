@@ -8,6 +8,7 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.naming.NamingException;
 
+import org.logistica.MenorCaminho;
 import org.logistica.ServicosEntregaMercadorias;
 import org.logistica.exception.MapaCadastradoException;
 import org.logistica.exception.VerticeNotFoundExcetion;
@@ -19,33 +20,43 @@ public class ServicoCadastraMapa {
     ServicosEntregaMercadorias servicos;
 
     @WebMethod
-    public void cadastraMapa(@WebParam(name = "origem") String origem, @WebParam(name = "destino") String destino,
+    public MensagemRetorno cadastraMapa(@WebParam(name = "origem") String origem, @WebParam(name = "destino") String destino,
             @WebParam(name = "distancia") Integer distancia) {
 
+        MensagemRetorno msgRetorno = new MensagemRetorno();
         try {
             if (this.servicos == null) {
                 this.lookup();
             }
             this.servicos.adicionaMapa(origem, destino, distancia);
+
+            msgRetorno.setResulMessage("Rota cadastrada com sucesso");
         } catch (MapaCadastradoException e) {
+            msgRetorno.setResulMessage("Erro no cadastro da rota. Consulte Log no servidor");
             e.printStackTrace();
         }
+
+        return msgRetorno;
     }
 
     @WebMethod
-    public void buscaCaminho(@WebParam(name = "origem") String origem, @WebParam(name = "destino") String destino,
+    public MensagemRetorno buscaCaminho(@WebParam(name = "origem") String origem, @WebParam(name = "destino") String destino,
             @WebParam(name = "autonomia") BigDecimal autonomia,
             @WebParam(name = "valorCombustivel") BigDecimal valorCombustivel) {
-
+        MensagemRetorno msgRetorno = new MensagemRetorno();
         try {
             if (servicos == null) {
                 this.lookup();
             }
-            servicos.buscaCaminho(origem, destino, autonomia, valorCombustivel);
+            MenorCaminho resultado = servicos.buscaCaminho(origem, destino, autonomia, valorCombustivel);
+
+            msgRetorno.setResulMessage("A rota a ser utilizada custara: " + resultado);
         } catch (VerticeNotFoundExcetion e) {
             e.printStackTrace();
+            msgRetorno.setResulMessage("Erro no cadastro da rota. Consulte Log no servidor");
         }
 
+        return msgRetorno;
     }
 
     private void lookup() {
