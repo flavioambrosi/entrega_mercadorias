@@ -55,8 +55,6 @@ public class ServicosEntregaMercadoriasBean implements ServicosEntregaMercadoria
 	        aresta.setDistancia(distancia);
 	        dao.insereAresta(aresta, em);
 
-	        this.montaGrafo();
-
 		} finally {
 		    emf.close();
 		}
