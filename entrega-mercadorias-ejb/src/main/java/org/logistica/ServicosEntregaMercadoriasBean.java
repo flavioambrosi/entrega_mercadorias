@@ -4,9 +4,12 @@ import java.math.BigDecimal;
 import java.util.Collection;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
 
 import org.apache.commons.collections15.Transformer;
 import org.logistica.dao.LogisticaDAO;
@@ -20,44 +23,43 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 
 @Stateless (name = "ejb/ServicosEntregaMercadorias", mappedName = "ejb/ServicosEntregaMercadorias")
+@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class ServicosEntregaMercadoriasBean implements ServicosEntregaMercadorias{
 
-    private static String ENTITY_MANAGER_NAME = "LOGISTICA";
+    @PersistenceContext(name="LOGISTICA")
+    private EntityManager entityManager;
 
 	public void adicionaMapa(String origem, String destino, Integer distancia) throws MapaCadastradoException{
-	    EntityManagerFactory emf = Persistence.createEntityManagerFactory(ENTITY_MANAGER_NAME);
-        EntityManager em = emf.createEntityManager();
 
-		try {
-		    LogisticaDAO dao = new LogisticaDAO();
-		      //Verifica a existencia do ponto de origem informado
-	        Vertice verticeOrigem = dao.buscaVertice(origem);
+        LogisticaDAO dao = new LogisticaDAO();
+        // Verifica a existencia do ponto de origem informado
+        Vertice verticeOrigem = dao.buscaVertice(origem);
 
-	        //Verifica a existencia dos pontos origem e destino e caso já exista, retorna um erro.
-	        if(verticeOrigem != null){
-	            for(Aresta aresta : verticeOrigem.getArestas()){
-	                if(aresta.getDestino().equals(destino)){
-	                    throw new MapaCadastradoException("Mapa com origem em " + origem + " e destino em " + destino + " já cadastrado.");
-	                }
-	            }
-	        } else {
-	            verticeOrigem = new Vertice(origem);
-	            dao.insereVertice(verticeOrigem, em);
-	        }
+        // Verifica a existencia dos pontos origem e destino e caso já exista,
+        // retorna um erro.
+        if (verticeOrigem != null) {
+            for (Aresta aresta : verticeOrigem.getArestas()) {
+                if (aresta.getDestino().equals(destino)) {
+                    throw new MapaCadastradoException("Mapa com origem em " + origem + " e destino em " + destino
+                            + " já cadastrado.");
+                }
+            }
+        } else {
+            verticeOrigem = new Vertice(origem);
+            dao.insereVertice(verticeOrigem, this.entityManager);
+        }
 
-	        Vertice verticeDestino = dao.buscaVertice(destino);
-	        if(verticeDestino == null) {
-	            verticeDestino = new Vertice(destino);
-	            dao.insereVertice(verticeDestino, em);
-	        }
+        Vertice verticeDestino = dao.buscaVertice(destino);
+        if (verticeDestino == null) {
+            verticeDestino = new Vertice(destino);
+            dao.insereVertice(verticeDestino, this.entityManager);
+        }
 
-	        Aresta aresta = new Aresta(verticeOrigem, verticeDestino);
-	        aresta.setDistancia(distancia);
-	        dao.insereAresta(aresta, em);
+        Aresta aresta = new Aresta(verticeOrigem, verticeDestino);
+        aresta.setDistancia(distancia);
+        dao.insereAresta(aresta, this.entityManager);
 
-		} finally {
-		    emf.close();
-		}
+
 
 	}
 
