@@ -1,98 +1,40 @@
+/**
+ *
+ */
 package org.logistica;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 
-import javax.ejb.Stateless;
+import javax.ejb.Local;
 
-import org.apache.commons.collections15.Transformer;
-import org.logistica.dao.LogisticaDAO;
-import org.logistica.estrutura.Aresta;
-import org.logistica.estrutura.Vertice;
 import org.logistica.exception.MapaCadastradoException;
 import org.logistica.exception.VerticeNotFoundExcetion;
 
-import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath;
-import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseMultigraph;
 
-@Stateless
-public class ServicosEntregaMercadorias {
-	
-	public void adicionaMapa(String origem, String destino, Integer distancia) throws MapaCadastradoException{
-		LogisticaDAO dao = new LogisticaDAO();
-		
-		//Verifica a existencia do ponto de origem informado
-		Vertice verticeOrigem = dao.buscaVertice(origem);
-		
-		//Verifica a existencia dos pontos origem e destino e caso já exista, retorna um erro.
-		if(verticeOrigem != null){
-			for(Aresta aresta : verticeOrigem.getArestas()){
-				if(aresta.getDestino().equals(destino)){
-					throw new MapaCadastradoException("Mapa com origem em " + origem + " e destino em " + destino + " já cadastrado.");
-				}
-			}
-		} else {
-			verticeOrigem = new Vertice(origem);
-			dao.insereVertice(verticeOrigem);					
-		}
-		
-		Vertice verticeDestino = dao.buscaVertice(destino);
-		if(verticeDestino == null) {
-			verticeDestino = new Vertice(destino);
-			dao.insereVertice(verticeDestino);
-		}
-		
-		Aresta aresta = new Aresta(verticeOrigem, verticeDestino);
-		aresta.setDistancia(distancia);
-		dao.insereAresta(aresta);
-		
-		this.montaGrafo();
-	}
-	
-	public BigDecimal buscaCaminho(String origem, String destino, BigDecimal autonomia, BigDecimal valorCombustivel) throws VerticeNotFoundExcetion{
-		LogisticaDAO dao = new LogisticaDAO();
-		Vertice verticeOrigem = dao.buscaVertice(origem);
-		if(verticeOrigem == null){
-			throw new VerticeNotFoundExcetion("Origem não encontrada: " + origem);
-		}
-		
-		Vertice verticeDestino = dao.buscaVertice(destino);
-		if(verticeDestino == null){
-			throw new VerticeNotFoundExcetion("Destino não encontrado: " + destino);
-		}
-		
-		Graph<Vertice, Aresta> g = this.montaGrafo();
-		
-		Transformer<Aresta, Integer> wtTransformer = new Transformer<Aresta, Integer>() {
-			public Integer transform(Aresta link) {
-				return link.getDistancia();
-			}
-		};
-		DijkstraShortestPath<Vertice, Aresta> alg = new DijkstraShortestPath<Vertice, Aresta>(g, wtTransformer);
-		Number distanciaTotal = alg.getDistance(verticeOrigem, verticeDestino);
-		
-		BigDecimal custoTotal = BigDecimal.valueOf(distanciaTotal.intValue()).divide(autonomia).setScale(2,BigDecimal.ROUND_HALF_DOWN);
-		custoTotal = custoTotal.multiply(valorCombustivel);
-		
-		return custoTotal;		
-	}
-	
-	private Graph<Vertice, Aresta> montaGrafo(){
-		LogisticaDAO dao = new LogisticaDAO();
-		
-		Collection<Vertice> vertices = dao.buscaTodosVertices();
-		Graph<Vertice, Aresta> g = new SparseMultigraph<Vertice, Aresta>();
-		
-		for (Vertice vertice : vertices) {
-			g.addVertex(vertice);
-			
-			for(Aresta aresta: vertice.getArestas()){
-				g.addEdge(aresta, aresta.getOrigem(), aresta.getDestino());
-			}
-		}
-		
-		return g;
-	}
+/**
+ * Interface de servicos.
+ *
+ */
+@Local
+public interface ServicosEntregaMercadorias {
 
+    /**
+     * Adiciona pontos no mapa
+     * @param origem ponto de origem
+     * @param destino ponto de destino
+     * @param distancia distancia entre os pontos
+     * @throws MapaCadastradoException caso ocorra algum erro no processamento
+     */
+    public void adicionaMapa(String origem, String destino, Integer distancia) throws MapaCadastradoException;
+
+    /**
+     * Retorna o valor da viagem pelo menor caminho entre dois pontos.
+     * @param origem ponto de origem
+     * @param destino ponto de destino
+     * @param autonomia litros/km do caminhao
+     * @param valorCombustivel valor do combustivel
+     * @return custo da viagem entre os pontos
+     * @throws VerticeNotFoundExcetion caso ocorra algum erro no processamento
+     */
+    public BigDecimal buscaCaminho(String origem, String destino, BigDecimal autonomia, BigDecimal valorCombustivel) throws VerticeNotFoundExcetion;
 }
