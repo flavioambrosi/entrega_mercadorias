@@ -53,7 +53,9 @@ public class ServicoCadastraMapa {
             if(resultado.getMensagemErro() != null){
                 msgRetorno.setResulMessage(resultado.getMensagemErro());
             } else {
-                msgRetorno.setResulMessage("A rota a ser utilizada custara: " + resultado.getMenorCaminho() + ". Custo: " + resultado.getCustoRota());
+                msgRetorno
+                    .setResulMessage("A rota a ser utilizada custara: " + resultado.getMenorCaminho() + ". Custo: "
+                            + resultado.getCustoRota() + ". Distancia total: " + resultado.getDistanciaRota());
             }
         } catch (VerticeNotFoundExcetion e) {
             e.printStackTrace();

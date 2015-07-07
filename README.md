@@ -22,7 +22,7 @@ De inicio identifiquei que se trata de um problema de menor caminho e para soluc
 JUNG (http://jung.sourceforge.net/). Essa api é responsável pela criação do grafo e do algoritmo Dijkstra. Implementadas as classes Aresta e Vertice que serão persistidas e utilizadas no grafo.
 Foram desenvolvidas as camadas de persistencia utilizando JPA + Hibernate e de serviços utilizando EJB3. Essa que será responsável pelo cadastramento do mapa, pela montagem do grafo e pela busca da rota desejada. O códido se encontra em entrega-mercadorias-ejb.
 
-Foi desenvolvido também os WebServices ServicoCadastraMapa para realizar as operações citadas. O códido se encontra em entrega-mercadorias-web.
+Foi desenvolvido também os WebServices ServicoBuscaMenorCaminho e ServicoCadastraMapa para realizar as operações citadas. O códido se encontra em entrega-mercadorias-web.
 
 Todo o projeto foi desenvolvido utilizando J2EE 6.
 
@@ -39,6 +39,4 @@ Realizar as seguintes configurações no JBOSS:
 
 Para a criação do banco, executar o script cria_banco_mysql.sql
 
-Realizados testes do webservice para criaçao de mapa utilizando SOAPUI. Testes ok.
-
-Realizados testes do webservice para busca do caminho utilizando SOAPUI. Em fase de testes. Esta ocorrendo um erro na busca do menor caminho. Classe MainJung possui o mesmo cenário e executa normalmente. Analisando o problema.
+Pendente da execução de testes.
