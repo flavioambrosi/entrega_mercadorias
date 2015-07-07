@@ -40,3 +40,5 @@ Realizar as seguintes configurações no JBOSS:
 Para a criação do banco, executar o script cria_banco_mysql.sql
 
 Testes dos serviços realizados utilizando SoapUI.
+
+A maneira de testar o sistema atualmente é importar o WSDL no SoapUI e realizar as requisições.
