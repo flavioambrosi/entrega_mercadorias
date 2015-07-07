@@ -64,56 +64,47 @@ public class ServicosEntregaMercadoriasBean implements ServicosEntregaMercadoria
 
 	public MenorCaminho buscaCaminho(String origem, String destino, BigDecimal autonomia, BigDecimal valorCombustivel) throws VerticeNotFoundExcetion{
 		LogisticaDAO dao = new LogisticaDAO();
-		MenorCaminho caminho = new MenorCaminho();
-
-		try {
-    		Vertice verticeOrigem = dao.buscaVertice(origem);
-    		if(verticeOrigem == null){
-    		    caminho.setMensagemErro("Origem não encontrada: " + origem);
-    			throw new VerticeNotFoundExcetion("Origem não encontrada: " + origem);
-    		}
-
-    		Vertice verticeDestino = dao.buscaVertice(destino);
-    		if(verticeDestino == null){
-    		    caminho.setMensagemErro("Destino não encontrado: " + destino);
-    			throw new VerticeNotFoundExcetion("Destino não encontrado: " + destino);
-    		}
-
-            Collection<Vertice> vertices = dao.buscaTodosVertices();
-            Graph<Vertice, Aresta> g = new SparseMultigraph<Vertice, Aresta>();
-
-            for (Vertice vertice : vertices) {
-                if(vertice.equals(verticeOrigem)){
-                    verticeOrigem = vertice;
-                }else if(vertice.equals(verticeDestino)){
-                    verticeOrigem = vertice;
-                }
-
-                for(Aresta aresta: vertice.getArestas()){
-                    g.addEdge(aresta, aresta.getOrigem(), aresta.getDestino());
-                }
-            }
-
-    		Transformer<Aresta, Integer> wtTransformer = new Transformer<Aresta, Integer>() {
-    			public Integer transform(Aresta link) {
-    				return link.getDistancia();
-    			}
-    		};
-    		DijkstraShortestPath<Vertice, Aresta> alg = new DijkstraShortestPath<Vertice, Aresta>(g, wtTransformer);
-    		List<Aresta> l = alg.getPath(verticeOrigem, verticeDestino);
-    		Number distanciaTotal = alg.getDistance(verticeOrigem, verticeDestino);
-
-    		BigDecimal custoTotal = BigDecimal.valueOf(distanciaTotal.intValue()).divide(autonomia).setScale(2,BigDecimal.ROUND_HALF_DOWN);
-    		custoTotal = custoTotal.multiply(valorCombustivel);
-
-
-    		caminho.setMenorCaminho(l.toString());
-    		caminho.setDistanciaRota(distanciaTotal);
-    		caminho.setCustoRota(custoTotal);
-		} catch (Exception ex){
-		    caminho.setMensagemErro(ex.getMessage());
+		Vertice verticeOrigem = dao.buscaVertice(origem);
+		if(verticeOrigem == null){
+			throw new VerticeNotFoundExcetion("Origem não encontrada: " + origem);
 		}
 
-        return caminho;
+		Vertice verticeDestino = dao.buscaVertice(destino);
+		if(verticeDestino == null){
+			throw new VerticeNotFoundExcetion("Destino não encontrado: " + destino);
+		}
+
+        Collection<Vertice> vertices = dao.buscaTodosVertices();
+        Graph<Vertice, Aresta> g = new SparseMultigraph<Vertice, Aresta>();
+
+        for (Vertice vertice : vertices) {
+            for(Aresta aresta: vertice.getArestas()){
+                if(aresta.getOrigem().getDescricao().equals(origem)){
+                    verticeOrigem = aresta.getOrigem();
+                }else if(aresta.getDestino().getDescricao().equals(destino)){
+                    verticeDestino = aresta.getDestino();
+                }
+
+                g.addEdge(aresta, aresta.getOrigem(), aresta.getDestino());
+            }
+        }
+
+		Transformer<Aresta, Integer> wtTransformer = new Transformer<Aresta, Integer>() {
+			public Integer transform(Aresta link) {
+				return link.getDistancia();
+			}
+		};
+		DijkstraShortestPath<Vertice, Aresta> alg = new DijkstraShortestPath<Vertice, Aresta>(g, wtTransformer);
+		List<Aresta> l = alg.getPath(verticeOrigem, verticeDestino);
+		Number distanciaTotal = alg.getDistance(verticeOrigem, verticeDestino);
+
+		BigDecimal custoTotal = BigDecimal.valueOf(distanciaTotal.intValue()).divide(autonomia).setScale(2,BigDecimal.ROUND_HALF_DOWN);
+		custoTotal = custoTotal.multiply(valorCombustivel);
+
+		MenorCaminho caminho = new MenorCaminho();
+		caminho.setMenorCaminho(l.toString());
+		caminho.setDistanciaRota(distanciaTotal);
+		caminho.setCustoRota(custoTotal);
+		return caminho;
 	}
 }

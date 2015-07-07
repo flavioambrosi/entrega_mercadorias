@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
@@ -102,20 +103,15 @@ public class Aresta {
 
 	@Override
 	public boolean equals(Object obj) {
-	    if(obj == null){
-            return false;
-        }
-
-        if(obj == this){
-            return true;
-        }
-
-        if(!(obj instanceof Aresta)){
-            return false;
-        }
-
-        Aresta other = (Aresta) obj;
-        return this.id.equals(other.id);
+	    if(!(obj instanceof Aresta)){
+	        return false;
+	    }
+	    
+	    Aresta other = (Aresta)obj;
+	    EqualsBuilder builder = new EqualsBuilder();
+	    builder.append(this.id, other.id);
+	    builder.append(this.distancia, other.distancia);
+	    return builder.isEquals();
 	}
 
 	/* (non-Javadoc)
@@ -123,7 +119,7 @@ public class Aresta {
 	 */
 	@Override
 	public int hashCode() {
-	    HashCodeBuilder builder = new HashCodeBuilder(1,31);
+	    HashCodeBuilder builder = new HashCodeBuilder();
         builder.append(this.id);
         builder.append(this.getDistancia());
         return builder.toHashCode();

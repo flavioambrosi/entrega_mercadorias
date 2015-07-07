@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
@@ -86,20 +87,16 @@ public class Vertice  {
 
 	@Override
 	public boolean equals(Object obj) {
-	    if(obj == null){
-	        return false;
-	    }
-
-	    if(obj == this){
-	        return true;
-	    }
-
 	    if(!(obj instanceof Vertice)){
 	        return false;
 	    }
 
+	    EqualsBuilder builder = new EqualsBuilder();
 	    Vertice other = (Vertice) obj;
-	    return this.id.equals(other.id) && this.descricao.equals(other.descricao);
+	    builder.append(this.id, other.id);
+	    builder.append(this.descricao, other.descricao);
+
+	    return builder.isEquals();
 	}
 
 	/* (non-Javadoc)
@@ -110,7 +107,7 @@ public class Vertice  {
 	    HashCodeBuilder builder = new HashCodeBuilder(1,31);
 	    builder.append(this.id);
 	    builder.append(this.descricao);
-	    builder.append(this.arestas);
+
 	    return builder.toHashCode();
 	}
 }
