@@ -39,4 +39,4 @@ Realizar as seguintes configurações no JBOSS:
 
 Para a criação do banco, executar o script cria_banco_mysql.sql
 
-Pendente da execução de testes.
+Testes dos serviços realizados utilizando SoapUI.
